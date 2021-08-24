@@ -33,11 +33,13 @@ public class Register extends JFrame implements ActionListener{
 	Vector<User> userVec = new Vector<>();
 	String PASSWORD_PATTERN = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}";
 	Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+	DBConnection db;
 
 
-	public Register (Vector<User> userVec) {
+	public Register (Vector<User> userVec, DBConnection db) {
 		// TODO Auto-generated constructor stub
 		this.userVec = userVec; //constructor
+		this.db = db;
 		
 		buttText();
 		ganarateLabel();
@@ -204,6 +206,10 @@ public class Register extends JFrame implements ActionListener{
 		return true;
 		
 	}
+	
+	public void insertUserToDB(String name, String address, String Gender, Integer age, String password) {
+		
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -220,15 +226,17 @@ public class Register extends JFrame implements ActionListener{
 				if(userNameValidator(name) == true) {
 					User newUser = new User(name, address, gender, age, password);
 					userVec.add(newUser);
+					db.insertUser(name, address, age, gender, password);
 					JOptionPane.showMessageDialog(this, name + " berhasil terdaftar");
 					this.dispose();
-					new Login(userVec);
+					new Login(userVec, db);
 				}
 			}
 			
 		}else if(e.getSource() == buttonLogin) {
 			this.dispose();
-			new Login(userVec);
+			new Login(userVec, db);
+//			new Home(userVec, new User("Richard", "Pade", "Male", 2, "YoNdakTah6"));
 			
 		}
 		

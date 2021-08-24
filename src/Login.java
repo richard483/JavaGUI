@@ -21,11 +21,13 @@ public class Login extends JFrame implements ActionListener{
 	JPasswordField texPass;
 	JButton buttonRegister,buttonLogin;;
 	Vector<User> userVec = new Vector<>();
+	DBConnection db;
 
 
-	public Login (Vector<User> userVec) {
+	public Login (Vector<User> userVec, DBConnection db) {
 		// TODO Auto-generated constructor stub
 		this.userVec = userVec; //constructor
+		this.db = db;
 		
 		buttText();
 		ganarateLabel();
@@ -109,7 +111,7 @@ public class Login extends JFrame implements ActionListener{
 		// TODO Auto-generated method stub
 		if(e.getSource() == buttonRegister) {
 			this.dispose();
-			new Register(userVec);
+			new Register(userVec, db);
 			
 		}else if(e.getSource() == buttonLogin) {
 			String name = texNama.getText();
@@ -118,7 +120,7 @@ public class Login extends JFrame implements ActionListener{
 			if(passwordValidator(name, password) != -1) {
 				JOptionPane.showMessageDialog(this, name+" berhasil login!");
 				this.dispose();
-				new Home(userVec, userVec.get(passwordValidator(name, password)));
+				new Home(userVec, userVec.get(passwordValidator(name, password)), db);
 			}
 			
 		}

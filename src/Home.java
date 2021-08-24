@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
@@ -33,12 +34,15 @@ public class Home extends JFrame implements ActionListener, MenuListener{
 	JMenuBar homeBar;
 	JMenu profileMenu;
 	JMenuItem logoutMenu;
+	
+	DBConnection db;
 
 
-	public Home (Vector<User> userVec, User user) {
+	public Home (Vector<User> userVec, User user, DBConnection db) {
 		// TODO Auto-generated constructor stub
 		this.userVec = userVec; //constructor
 		this.user = user;
+		this.db = db;
 		
 		ganarateLabel();
 		generateTable();
@@ -78,7 +82,7 @@ public class Home extends JFrame implements ActionListener, MenuListener{
 		panelbody = new JPanel(new GridLayout(0,2));
 		panelbody.setBackground(Color.orange);
 		panelBody1 = new JPanel(new BorderLayout());
-		panel2 = new JPanel(new FlowLayout(FlowLayout.LEFT) );
+		panel2 = new JPanel(new BorderLayout() );
 		panel2.setBackground(Color.orange);
 //		panel3 = new JPanel(new FlowLayout());
 		
@@ -96,14 +100,15 @@ public class Home extends JFrame implements ActionListener, MenuListener{
 		
 		panelbody.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
 		
-		panelbody.setPreferredSize(new Dimension(200, 200));
-		panelBody1.add(panelbody);
+		panelbody.setBorder(new EmptyBorder(10, 200, 0, 200));
+		panelBody1.add(panelbody, BorderLayout.CENTER);
 		panelBody1.add(labelYourProfile, BorderLayout.NORTH);
+		panelBody1.setPreferredSize(new Dimension(100, 100));
 		
 //		panel3.add(label);
 		
-		panel2.add(panelBody1);
-		panel2.add(sp);
+		panel2.add(panelBody1, BorderLayout.NORTH);
+		panel2.add(sp, BorderLayout.CENTER);
 		
 //		panel1.add(panel3, BorderLayout.NORTH);
 //		panel1.add(panel2, BorderLayout.SOUTH);
@@ -113,15 +118,15 @@ public class Home extends JFrame implements ActionListener, MenuListener{
 		add(panel1);
 	}
 	
-	public Vector<Vector<String>> getUserData() {
-		Vector<Vector<String>> data = new Vector<>();
+	public Vector<Vector<Object>> getUserData() {
+		Vector<Vector<Object>> data = new Vector<>();
 
 		for(int i=0; i<userVec.size(); i++) {
-			Vector<String> rows = new Vector<>();//pake object aj jgn string, klo obj bisa bnyk tipe data
+			Vector<Object> rows = new Vector<>();//pake object aj jgn string, klo obj bisa bnyk tipe data
 			rows.add(userVec.get(i).getName());
 			rows.add(userVec.get(i).getAddress());
 			rows.add(userVec.get(i).getGender());
-			rows.add(userVec.get(i).getAge().toString());
+			rows.add(userVec.get(i).getAge());
 			data.add(rows);
 		}
 
@@ -138,6 +143,7 @@ public class Home extends JFrame implements ActionListener, MenuListener{
 		table = new JTable(getUserData(), col);
 		
 		sp = new JScrollPane(table);
+		sp.setPreferredSize(new Dimension(600, 250));
 		
 //		add(sp);
 		
@@ -176,7 +182,7 @@ public class Home extends JFrame implements ActionListener, MenuListener{
 		// TODO Auto-generated method stub
 		if(e.getSource() == logoutMenu) {
 			this.dispose();
-			new Login(userVec);
+			new Login(userVec, db);
 		}
 
 		
